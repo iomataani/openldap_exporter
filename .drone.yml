@@ -1,0 +1,39 @@
+---
+kind: pipeline
+type: docker
+name: Build e push dell'immagine
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Clona il repository
+  image: alpine/git
+  commands:
+    - git clone ${DRONE_GIT_HTTP_URL} .
+    - git checkout ${DRONE_COMMIT}
+
+- name: Go build
+  image: gradle:latest
+  commands:
+  - gradle clean
+  - gradle assemble
+  - gradle check
+  - gradle build
+
+- name: Build e push del container
+  image: plugins/docker
+  settings:
+    insecure: false
+    dockerfile: Dockerfile
+    tag: latest
+    repo: gitlab.lantechlongwave.it/progettoauckland/customerportal
+    registry: gitlab.lantechlongwave.it
+    username:
+      from_secret: registryusername
+    password: 
+      from_secret: registrypassword
