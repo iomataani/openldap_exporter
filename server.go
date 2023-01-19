@@ -47,13 +47,13 @@ func showVersion(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) Start() error {
-	address := []string{s.server.Addr};
-	cosefalse := false;
+	address := []string{s.server.Addr}
+	cosefalse := false
 
-	configurazione := web.FlagConfig {
+	configurazione := web.FlagConfig{
 		WebListenAddresses: &address,
-		WebSystemdSocket: &cosefalse,  
-		WebConfigFile: &s.cfgPath,
+		WebSystemdSocket:   &cosefalse,
+		WebConfigFile:      &s.cfgPath,
 	}
 
 	s.logger.WithField("addr", s.server.Addr).Info("starting http listener")
