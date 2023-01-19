@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  openldap-exporter:
+    image: openldap-exporter:latest
+    ports:
+      - "9330:9330"
+    environment:
+      - "PROM_ADDR=:9330"
+      - "METRICS_PATH=/metrics"
+      - "LDAP_NET=tcp"
+      - "LDAP_ADDR=localhost:389"
+      - "LDAP_USER="
+      - "LDAP_PASS="
+      - "INTERVAL=30s"
+      - "WEB_CFG_FILE="
+      - "JSON_LOG=false"
