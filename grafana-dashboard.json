@@ -12,6 +12,18 @@
     "__elements": [],
     "__requires": [
         {
+            "type": "panel",
+            "id": "bargauge",
+            "name": "Bar gauge",
+            "version": ""
+        },
+        {
+            "type": "panel",
+            "id": "gauge",
+            "name": "Gauge",
+            "version": ""
+        },
+        {
             "type": "grafana",
             "id": "grafana",
             "name": "Grafana",
@@ -53,7 +65,7 @@
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": null,
-    "iteration": 1674142870472,
+    "iteration": 1674204771557,
     "links": [],
     "liveNow": false,
     "panels": [
@@ -83,14 +95,14 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
+                "h": 7,
                 "w": 5,
                 "x": 0,
                 "y": 0
             },
             "id": 37,
             "options": {
-                "colorMode": "value",
+                "colorMode": "none",
                 "graphMode": "none",
                 "justifyMode": "auto",
                 "orientation": "auto",
@@ -132,12 +144,22 @@
                         "mode": "thresholds"
                     },
                     "mappings": [],
+                    "max": 100,
+                    "min": 0,
                     "thresholds": {
-                        "mode": "absolute",
+                        "mode": "percentage",
                         "steps": [
                             {
                                 "color": "green",
                                 "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 70
+                            },
+                            {
+                                "color": "red",
+                                "value": 90
                             }
                         ]
                     },
@@ -146,16 +168,13 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 5,
+                "h": 7,
+                "w": 3,
                 "x": 5,
                 "y": 0
             },
             "id": 38,
             "options": {
-                "colorMode": "value",
-                "graphMode": "none",
-                "justifyMode": "auto",
                 "orientation": "auto",
                 "reduceOptions": {
                     "calcs": [
@@ -164,7 +183,8 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -174,14 +194,14 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "rate(process_cpu_seconds_total{instance=\"$host\"}[$interval]) * 100",
+                    "expr": "rate(process_cpu_seconds_total{instance=\"$host\"}[$interval]) * 1000",
                     "interval": "",
                     "legendFormat": "[{{dn}}] ",
                     "refId": "A"
                 }
             ],
             "title": "CPU Use %",
-            "type": "stat"
+            "type": "gauge"
         },
         {
             "datasource": {
@@ -209,9 +229,9 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 3,
-                "x": 10,
+                "h": 7,
+                "w": 4,
+                "x": 8,
                 "y": 0
             },
             "id": 39,
@@ -237,7 +257,7 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "rate(openldap_bind{result=\"ok\",instance=\"$host\"}[$interval]) * 1000",
+                    "expr": "rate(openldap_bind{result=\"ok\",instance=\"$host\"}[$interval])",
                     "interval": "",
                     "legendFormat": "",
                     "refId": "A"
@@ -272,9 +292,9 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 3,
-                "x": 13,
+                "h": 7,
+                "w": 4,
+                "x": 12,
                 "y": 0
             },
             "id": 40,
@@ -300,13 +320,13 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "rate(openldap_dial{result=\"ok\",instance=\"$host\"}[$interval]) * 1000",
+                    "expr": "rate(openldap_dial{result=\"ok\",instance=\"$host\"}[$interval])",
                     "interval": "",
                     "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "title": "LDAP Bind",
+            "title": "LDAP Dial",
             "type": "stat"
         },
         {
@@ -335,8 +355,8 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 5,
-                "w": 3,
+                "h": 7,
+                "w": 4,
                 "x": 16,
                 "y": 0
             },
@@ -363,7 +383,7 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "rate(openldap_scrape{result=\"ok\",instance=\"$host\"}[$interval]) * 1000",
+                    "expr": "rate(openldap_scrape{result=\"ok\",instance=\"$host\"}[$interval])",
                     "interval": "",
                     "legendFormat": "",
                     "refId": "A"
@@ -373,30 +393,28 @@
             "type": "stat"
         },
         {
-            "collapsed": false,
-            "gridPos": {
-                "h": 1,
-                "w": 24,
-                "x": 0,
-                "y": 5
-            },
-            "id": 18,
-            "panels": [],
-            "title": "Counters",
-            "type": "row"
-        },
-        {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
             },
-            "description": "dn=\"cn=Bytes,cn=Statistics,cn=Monitor\"",
+            "description": "",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
-                    "mappings": [],
+                    "mappings": [
+                        {
+                            "options": {
+                                "pattern": "[a-zA-Z]*\\,",
+                                "result": {
+                                    "index": 0,
+                                    "text": "$1"
+                                }
+                            },
+                            "type": "regex"
+                        }
+                    ],
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
@@ -411,17 +429,15 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 4,
-                "w": 2,
+                "h": 7,
+                "w": 6,
                 "x": 0,
-                "y": 6
+                "y": 7
             },
-            "id": 5,
+            "id": 42,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
+                "displayMode": "basic",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -429,7 +445,7 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showUnfilled": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -439,25 +455,26 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Bytes,cn=Statistics,cn=Monitor\"}",
+                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=~\".*cn=Statistics,cn=Monitor\"}",
                     "interval": "",
-                    "legendFormat": "[{{dn}}] ",
+                    "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "title": "Bytes",
-            "type": "stat"
+            "title": "Statistics",
+            "transformations": [],
+            "type": "bargauge"
         },
         {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
             },
-            "description": "cn=Current,cn=Connections,cn=Monitor",
+            "description": "",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -468,149 +485,20 @@
                                 "value": null
                             }
                         ]
-                    },
-                    "unit": "none"
+                    }
                 },
                 "overrides": []
             },
             "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 2,
-                "y": 6
-            },
-            "id": 6,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Current,cn=Connections,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Connessioni Correnti",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "cn=Entries,cn=Statistics,cn=Monitor",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 4,
-                "y": 6
-            },
-            "id": 7,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Entries",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "cn=Max File Descriptors,cn=Connections,cn=Monitor",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
+                "h": 7,
+                "w": 7,
                 "x": 6,
-                "y": 6
+                "y": 7
             },
-            "id": 8,
+            "id": 43,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
+                "displayMode": "basic",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -618,7 +506,7 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showUnfilled": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -628,25 +516,26 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Max File Descriptors,cn=Connections,cn=Monitor\"}",
+                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=~\".*,cn=Connections,cn=Monitor\"}",
                     "interval": "",
-                    "legendFormat": "[{{dn}}] ",
+                    "legendFormat": "{{dn}}",
                     "refId": "A"
                 }
             ],
-            "title": "Max File Descriptors",
-            "type": "stat"
+            "title": "Connections",
+            "transformations": [],
+            "type": "bargauge"
         },
         {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
             },
-            "description": "cn=PDU,cn=Statistics,cn=Monitor",
+            "description": "",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -657,23 +546,20 @@
                                 "value": null
                             }
                         ]
-                    },
-                    "unit": "none"
+                    }
                 },
                 "overrides": []
             },
             "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 8,
-                "y": 6
+                "h": 7,
+                "w": 7,
+                "x": 13,
+                "y": 7
             },
-            "id": 9,
+            "id": 44,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
+                "displayMode": "basic",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -681,7 +567,7 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showUnfilled": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -691,25 +577,26 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=PDU,cn=Statistics,cn=Monitor\"}",
+                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=~\".*,cn=Waiters,cn=Monitor\"}",
                     "interval": "",
-                    "legendFormat": "[{{dn}}] ",
+                    "legendFormat": "{{dn}}",
                     "refId": "A"
                 }
             ],
-            "title": "PDUs",
-            "type": "stat"
+            "title": "Waiters",
+            "transformations": [],
+            "type": "bargauge"
         },
         {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
             },
-            "description": "cn=Read,cn=Waiters,cn=Monitor",
+            "description": "",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -720,23 +607,20 @@
                                 "value": null
                             }
                         ]
-                    },
-                    "unit": "none"
+                    }
                 },
                 "overrides": []
             },
             "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 10,
-                "y": 6
+                "h": 11,
+                "w": 9,
+                "x": 0,
+                "y": 14
             },
-            "id": 10,
+            "id": 45,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
+                "displayMode": "basic",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -744,7 +628,7 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showUnfilled": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -754,25 +638,25 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Read,cn=Waiters,cn=Monitor\"}",
+                    "expr": "openldap_monitored_object{instance=\"$host\",dn=~\".*,cn=Threads,cn=Monitor\"}",
                     "interval": "",
-                    "legendFormat": "[{{dn}}] ",
+                    "legendFormat": "{{dn}}]",
                     "refId": "A"
                 }
             ],
-            "title": "Waiters Read",
-            "type": "stat"
+            "title": "Threads",
+            "type": "bargauge"
         },
         {
             "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
             },
-            "description": "cn=Total,cn=Connections,cn=Monitor",
+            "description": "",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -783,23 +667,20 @@
                                 "value": null
                             }
                         ]
-                    },
-                    "unit": "none"
+                    }
                 },
                 "overrides": []
             },
             "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 12,
-                "y": 6
+                "h": 11,
+                "w": 11,
+                "x": 9,
+                "y": 14
             },
-            "id": 13,
+            "id": 46,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
+                "displayMode": "basic",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
@@ -807,7 +688,7 @@
                     "fields": "",
                     "values": false
                 },
-                "textMode": "auto"
+                "showUnfilled": true
             },
             "pluginVersion": "8.3.5",
             "targets": [
@@ -817,1243 +698,1702 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Write,cn=Waiters,cn=Monitor\"}",
+                    "expr": "openldap_monitor_operation{dn=~\".*,cn=Operations,cn=Monitor\",instance=\"$host\"}",
                     "interval": "",
-                    "legendFormat": "[{{dn}}] ",
+                    "legendFormat": "{{dn}}]",
                     "refId": "A"
                 }
             ],
-            "title": "Waiters Write",
-            "type": "stat"
+            "title": "Operations",
+            "type": "bargauge"
         },
         {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "cn=Referrals,cn=Statistics,cn=Monitor",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 14,
-                "y": 6
-            },
-            "id": 11,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Referrals,cn=Statistics,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Referrals",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "cn=Total,cn=Connections,cn=Monitor",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 16,
-                "y": 6
-            },
-            "id": 12,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Total,cn=Connections,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Total Connections",
-            "type": "stat"
-        },
-        {
-            "collapsed": false,
+            "collapsed": true,
             "gridPos": {
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 10
+                "y": 25
+            },
+            "id": 18,
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "dn=\"cn=Bytes,cn=Statistics,cn=Monitor\"",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "decbytes"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 0,
+                        "y": 17
+                    },
+                    "id": 5,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Bytes,cn=Statistics,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Bytes",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Current,cn=Connections,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 2,
+                        "y": 17
+                    },
+                    "id": 6,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Current,cn=Connections,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Connessioni Correnti",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Entries,cn=Statistics,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 4,
+                        "y": 17
+                    },
+                    "id": 7,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Entries",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Max File Descriptors,cn=Connections,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 6,
+                        "y": 17
+                    },
+                    "id": 8,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Max File Descriptors,cn=Connections,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Max File Descriptors",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=PDU,cn=Statistics,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 8,
+                        "y": 17
+                    },
+                    "id": 9,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=PDU,cn=Statistics,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "PDUs",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Read,cn=Waiters,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 10,
+                        "y": 17
+                    },
+                    "id": 10,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Read,cn=Waiters,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Waiters Read",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Total,cn=Connections,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 12,
+                        "y": 17
+                    },
+                    "id": 13,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Write,cn=Waiters,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Waiters Write",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Referrals,cn=Statistics,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 14,
+                        "y": 17
+                    },
+                    "id": 11,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Referrals,cn=Statistics,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Referrals",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "cn=Total,cn=Connections,cn=Monitor",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 16,
+                        "y": 17
+                    },
+                    "id": 12,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_counter_object{instance=\"$host\",dn=\"cn=Total,cn=Connections,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Total Connections",
+                    "type": "stat"
+                }
+            ],
+            "title": "Counters",
+            "type": "row"
+        },
+        {
+            "collapsed": true,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 26
             },
             "id": 16,
-            "panels": [],
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 0,
+                        "y": 27
+                    },
+                    "id": 14,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{instance=\"$host\",dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Abandon",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 2,
+                        "y": 27
+                    },
+                    "id": 19,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Add,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Add",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 4,
+                        "y": 27
+                    },
+                    "id": 20,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Bind,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Bind",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 6,
+                        "y": 27
+                    },
+                    "id": 21,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Compare,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Compare",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 8,
+                        "y": 27
+                    },
+                    "id": 22,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Delete,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Delete",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 10,
+                        "y": 27
+                    },
+                    "id": 23,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Extended,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Extended",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 12,
+                        "y": 27
+                    },
+                    "id": 24,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Modify,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Modify",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 14,
+                        "y": 27
+                    },
+                    "id": 25,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Modrdn,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Modrdn",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 16,
+                        "y": 27
+                    },
+                    "id": 26,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Search,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Search",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 18,
+                        "y": 27
+                    },
+                    "id": 27,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "none",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitor_operation{dn=\"cn=Unbind,cn=Operations,cn=Monitor\",instance=\"$host\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Unbind",
+                    "type": "stat"
+                }
+            ],
             "title": "Operations",
             "type": "row"
         },
         {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 0,
-                "y": 11
-            },
-            "id": 14,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{instance=\"$host\",dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Abandon",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 2,
-                "y": 11
-            },
-            "id": 19,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Add,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Add",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 4,
-                "y": 11
-            },
-            "id": 20,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Bind,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Bind",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 6,
-                "y": 11
-            },
-            "id": 21,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Compare,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Compare",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 8,
-                "y": 11
-            },
-            "id": 22,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Delete,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Delete",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 10,
-                "y": 11
-            },
-            "id": 23,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Extended,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Extended",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 12,
-                "y": 11
-            },
-            "id": 24,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Modify,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Modify",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 14,
-                "y": 11
-            },
-            "id": 25,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Modrdn,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Modrdn",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 16,
-                "y": 11
-            },
-            "id": 26,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Search,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Search",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 18,
-                "y": 11
-            },
-            "id": 27,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitor_operation{dn=\"cn=Unbind,cn=Operations,cn=Monitor\",instance=\"$host\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Unbind",
-            "type": "stat"
-        },
-        {
-            "collapsed": false,
+            "collapsed": true,
             "gridPos": {
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 15
+                "y": 27
             },
             "id": 29,
-            "panels": [],
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 0,
+                        "y": 32
+                    },
+                    "id": 30,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Active,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Active Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 2,
+                        "y": 32
+                    },
+                    "id": 31,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Backload,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Backload Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 4,
+                        "y": 32
+                    },
+                    "id": 32,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Max Pending,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Max Pending Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 6,
+                        "y": 32
+                    },
+                    "id": 33,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Max,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Max Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 8,
+                        "y": 32
+                    },
+                    "id": 34,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Open,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Open Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 10,
+                        "y": 32
+                    },
+                    "id": 35,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Pending,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Pending Threads",
+                    "type": "stat"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "description": "",
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "thresholds"
+                            },
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    }
+                                ]
+                            },
+                            "unit": "none"
+                        },
+                        "overrides": []
+                    },
+                    "gridPos": {
+                        "h": 4,
+                        "w": 2,
+                        "x": 12,
+                        "y": 32
+                    },
+                    "id": 36,
+                    "options": {
+                        "colorMode": "value",
+                        "graphMode": "area",
+                        "justifyMode": "auto",
+                        "orientation": "auto",
+                        "reduceOptions": {
+                            "calcs": [
+                                "lastNotNull"
+                            ],
+                            "fields": "",
+                            "values": false
+                        },
+                        "textMode": "auto"
+                    },
+                    "pluginVersion": "8.3.5",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "type": "prometheus",
+                                "uid": "${DS_PROMETHEUS}"
+                            },
+                            "exemplar": true,
+                            "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Starting,cn=Threads,cn=Monitor\"}",
+                            "interval": "",
+                            "legendFormat": "[{{dn}}] ",
+                            "refId": "A"
+                        }
+                    ],
+                    "title": "Starting Threads",
+                    "type": "stat"
+                }
+            ],
             "title": "Object",
             "type": "row"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 0,
-                "y": 16
-            },
-            "id": 30,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Active,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Active Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 2,
-                "y": 16
-            },
-            "id": 31,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Backload,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Backload Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 4,
-                "y": 16
-            },
-            "id": 32,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Max Pending,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Max Pending Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 6,
-                "y": 16
-            },
-            "id": 33,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Max,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Max Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 8,
-                "y": 16
-            },
-            "id": 34,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Open,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Open Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 10,
-                "y": 16
-            },
-            "id": 35,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Pending,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Pending Threads",
-            "type": "stat"
-        },
-        {
-            "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-            },
-            "description": "",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
-                    "unit": "none"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 4,
-                "w": 2,
-                "x": 12,
-                "y": 16
-            },
-            "id": 36,
-            "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "textMode": "auto"
-            },
-            "pluginVersion": "8.3.5",
-            "targets": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "exemplar": true,
-                    "expr": "openldap_monitored_object{instance=\"$host\",dn=\"cn=Starting,cn=Threads,cn=Monitor\"}",
-                    "interval": "",
-                    "legendFormat": "[{{dn}}] ",
-                    "refId": "A"
-                }
-            ],
-            "title": "Starting Threads",
-            "type": "stat"
         }
     ],
     "refresh": "10s",
     "schemaVersion": 34,
     "style": "dark",
-    "tags": [],
+    "tags": [
+        "ldap"
+    ],
     "templating": {
         "list": [
             {
@@ -2165,13 +2505,13 @@
         ]
     },
     "time": {
-        "from": "now-6h",
+        "from": "now-24h",
         "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "OpenLDAP Monitoring",
     "uid": "12vrCIo4z",
-    "version": 6,
+    "version": 10,
     "weekStart": ""
 }
