@@ -1,5 +1,5 @@
 # STAGE 1: Build binaries
-FROM golang:latest as build
+FROM golang:1 as build
 WORKDIR /go/src/
 COPY . .
 RUN go mod tidy
@@ -7,7 +7,7 @@ RUN go mod vendor
 RUN make
 
 # STAGE 2: Build final image with minimal content
-FROM alpine
+FROM alpine:3
 RUN apk --no-cache add libc6-compat
 COPY --from=build /go/src/target/openldap_exporter /openldap_exporter
 
