@@ -2,9 +2,9 @@
 FROM golang:1 as build
 WORKDIR /go/src/
 COPY . .
-RUN go mod tidy
 RUN go mod vendor
 RUN go install golang.org/x/tools/cmd/goimports@latest
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2
 RUN make
 RUN make commit
 
