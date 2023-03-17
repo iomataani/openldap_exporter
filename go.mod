@@ -3,12 +3,12 @@ module github.com/iomataani/openldap_exporter
 go 1.20
 
 require (
-	github.com/go-kit/log v0.2.1
-	github.com/prometheus/client_golang v1.14.0
-	github.com/prometheus/exporter-toolkit v0.9.1
-	github.com/sirupsen/logrus v1.9.0
-	github.com/urfave/cli/v2 v2.25.0
-	golang.org/x/sync v0.1.0
+	github.com/go-kit/log v0.2.0
+	github.com/prometheus/client_golang v1.12.1
+	github.com/prometheus/exporter-toolkit v0.7.3
+	github.com/sirupsen/logrus v1.8.1
+	github.com/urfave/cli/v2 v2.4.0
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gopkg.in/ldap.v2 v2.5.1
 )
 
@@ -29,14 +29,13 @@ require (
 	github.com/prometheus/procfs v0.9.0 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/crypto v0.7.0 // indirect
-	golang.org/x/net v0.8.0 // indirect
-	golang.org/x/oauth2 v0.6.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.29.1 // indirect
+	golang.org/x/crypto v0.0.0-20210915214749-c084706c2272 // indirect
+	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf // indirect
+	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
+	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/appengine v1.6.6 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/asn1-ber.v1 v1.5.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
