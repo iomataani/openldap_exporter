@@ -22,7 +22,7 @@ target:
 .PHONY: format
 format:
 	@echo 'goimports ./...'
-	@goimports -w -local github.com/tomcz/openldap_exporter $(shell find . -type f -name '*.go' | grep -v '/vendor/')
+	@goimports -w -local github.com/iomataani/openldap_exporter $(shell find . -type f -name '*.go' | grep -v '/vendor/')
 
 .PHONY: lint
 lint:
