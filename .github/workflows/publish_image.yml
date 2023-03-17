@@ -13,6 +13,7 @@ on:
   push:
     branches:
       - master
+      - development
 
 env:
   REGISTRY: ghcr.io

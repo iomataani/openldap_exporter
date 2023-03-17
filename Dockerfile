@@ -4,7 +4,9 @@ WORKDIR /go/src/
 COPY . .
 RUN go mod tidy
 RUN go mod vendor
+RUN go install golang.org/x/tools/cmd/goimports@latest
 RUN make
+RUN make commit
 
 # STAGE 2: Build final image with minimal content
 FROM alpine:3
