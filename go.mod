@@ -7,7 +7,7 @@ require (
 	github.com/prometheus/client_golang v1.14.0
 	github.com/prometheus/exporter-toolkit v0.9.1
 	github.com/sirupsen/logrus v1.9.0
-	github.com/tomcz/gotools v0.4.2
+	github.com/tomcz/gotools v0.4.3
 	github.com/urfave/cli/v2 v2.25.0
 	golang.org/x/sync v0.1.0
 	gopkg.in/ldap.v2 v2.5.1
