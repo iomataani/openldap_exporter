@@ -11,7 +11,8 @@ RUN make
 
 # STAGE 2: Build final image with minimal content
 FROM alpine:3
-RUN apk --no-cache add libc6-compat
+RUN apk --no-cache add libc6-compat gcompat
+RUN ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2
 COPY --from=build /go/src/target/openldap_exporter /openldap_exporter
 
 # Environment Variables
