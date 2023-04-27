@@ -1,5 +1,5 @@
 ---
-name: "release"
+name: Publish openldap-exporter
 
 on:
   push:
