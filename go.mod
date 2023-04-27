@@ -9,7 +9,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/tomcz/gotools v0.4.3
 	github.com/urfave/cli/v2 v2.25.1
-	golang.org/x/sync v0.1.0
 	gopkg.in/ldap.v2 v2.5.1
 )
 
@@ -34,6 +33,7 @@ require (
 	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
