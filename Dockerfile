@@ -4,6 +4,9 @@ WORKDIR /go/src/
 COPY . .
 RUN go mod tidy
 RUN go mod vendor
+RUN go install golang.org/x/tools/cmd/goimports@latest
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+
 RUN make
 
 # STAGE 2: Build final image with minimal content
