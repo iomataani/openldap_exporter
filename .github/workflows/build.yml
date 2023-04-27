@@ -1,4 +1,4 @@
-name: build
+name: Build openldap-exporter
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: '1.20.2'
       - name: golangci-lint

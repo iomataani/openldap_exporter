@@ -4,12 +4,14 @@ WORKDIR /go/src/
 COPY . .
 RUN go mod vendor
 RUN go install golang.org/x/tools/cmd/goimports@latest
-RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+
 RUN make
 
 # STAGE 2: Build final image with minimal content
 FROM alpine:3
-RUN apk --no-cache add libc6-compat
+RUN apk --no-cache add libc6-compat gcompat
+RUN ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2
 COPY --from=build /go/src/target/openldap_exporter /openldap_exporter
 
 # Environment Variables
