@@ -8,7 +8,7 @@ require (
 	github.com/prometheus/exporter-toolkit v0.9.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/tomcz/gotools v0.4.3
-	github.com/urfave/cli/v2 v2.25.1
+	github.com/urfave/cli/v2 v2.25.4
 	gopkg.in/ldap.v2 v2.5.1
 )
 
