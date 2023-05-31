@@ -6,7 +6,7 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/prometheus/client_golang v1.15.1
 	github.com/prometheus/exporter-toolkit v0.10.0
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.2
 	github.com/tomcz/gotools v0.4.3
 	github.com/urfave/cli/v2 v2.25.1
 	gopkg.in/ldap.v2 v2.5.1
