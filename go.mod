@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/go-kit/log v0.2.1
-	github.com/prometheus/client_golang v1.20.4
+	github.com/prometheus/client_golang v1.20.5
 	github.com/prometheus/exporter-toolkit v0.10.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/tomcz/gotools v0.7.0
